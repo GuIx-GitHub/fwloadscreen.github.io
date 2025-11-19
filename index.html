@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargement...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        /* Conteneur des images de fond */
+        .background-slider {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .background-slider img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .background-slider img.active {
+            opacity: 1;
+        }
+
+        /* Overlay sombre */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        /* Conteneur principal */
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+        }
+
+        /* Logo du serveur */
+        .server-logo {
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .server-logo img {
+            max-width: 300px;
+            max-height: 300px;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+        }
+
+        /* Texte de chargement */
+        .loading-text {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            animation: fadeIn 1s ease-in-out;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        /* Barre de progression */
+        .progress-container {
+            width: 500px;
+            max-width: 90%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 5px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: white;
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Pourcentage */
+        .percentage {
+            color: white;
+            font-size: 24px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slider d'images de fond -->
+    <div class="background-slider" id="bgSlider">
+        <!-- Remplace ces URLs par tes propres images -->
+        <img src="https://guix-github.github.io/fwloadscreen.github.io/background1.png" alt="Background 1" class="active">
+        <img src="https://guix-github.github.io/fwloadscreen.github.io/background2.png" alt="Background 2">
+        <img src="https://guix-github.github.io/fwloadscreen.github.io/background3.png" alt="Background 3">
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Conteneur de chargement -->
+    <div class="loading-container">
+        <!-- Logo du serveur -->
+        <div class="server-logo">
+            <!-- Remplace par ton logo -->
+            <img src="https://guix-github.github.io/fwloadscreen.github.io/Logo%20Header.png" alt="Logo du serveur">
+        </div>
+
+        <!-- Texte de chargement -->
+        <div class="loading-text" id="loadingText">Initialisation...</div>
+
+        <!-- Barre de progression -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Pourcentage -->
+        <div class="percentage" id="percentage">0%</div>
+    </div>
+
+    <script>
+        // Slider d'images de fond
+        let currentImageIndex = 0;
+        const images = document.querySelectorAll('.background-slider img');
+        const totalImages = images.length;
+
+        function changeBackgroundImage() {
+            images[currentImageIndex].classList.remove('active');
+            currentImageIndex = (currentImageIndex + 1) % totalImages;
+            images[currentImageIndex].classList.add('active');
+        }
+
+        // Changer d'image toutes les 5 secondes
+        setInterval(changeBackgroundImage, 5000);
+
+        // Gestion du chargement Garry's Mod
+        function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode) {
+            // Tu peux utiliser ces informations si besoin
+        }
+
+        function SetStatusChanged(status) {
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = status;
+        }
+
+        function SetFilesTotal(total) {
+            // Nombre total de fichiers
+        }
+
+        function SetFilesNeeded(needed) {
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = `Téléchargement des fichiers... (${needed} restants)`;
+        }
+
+        function DownloadingFile(fileName) {
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = `Téléchargement: ${fileName}`;
+        }
+
+        function SetStatusChanged(status) {
+            const loadingText = document.getElementById('loadingText');
+            loadingText.textContent = status;
+        }
+
+        let totalFiles = 0;
+        let downloadedFiles = 0;
+
+        function SetFilesTotal(total) {
+            totalFiles = total;
+        }
+
+        function SetFilesNeeded(needed) {
+            downloadedFiles = totalFiles - needed;
+            updateProgress();
+            
+            const loadingText = document.getElementById('loadingText');
+            if (needed > 0) {
+                loadingText.textContent = `Téléchargement des fichiers... (${needed} restants)`;
+            }
+        }
+
+        function DownloadingFile(fileName) {
+            const loadingText = document.getElementById('loadingText');
+            const shortFileName = fileName.length > 50 ? fileName.substring(0, 50) + '...' : fileName;
+            loadingText.textContent = `Téléchargement: ${shortFileName}`;
+            downloadedFiles++;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            let progress = 0;
+            if (totalFiles > 0) {
+                progress = Math.floor((downloadedFiles / totalFiles) * 100);
+            }
+            
+            const progressBar = document.getElementById('progressBar');
+            const percentage = document.getElementById('percentage');
+            
+            progressBar.style.width = progress + '%';
+            percentage.textContent = progress + '%';
+        }
+
+        // Simulation pour test (retire ceci en production)
+        let testProgress = 0;
+        const testInterval = setInterval(() => {
+            testProgress += Math.random() * 5;
+            if (testProgress >= 100) {
+                testProgress = 100;
+                clearInterval(testInterval);
+            }
+            document.getElementById('progressBar').style.width = testProgress + '%';
+            document.getElementById('percentage').textContent = Math.floor(testProgress) + '%';
+            document.getElementById('loadingText').textContent = 'Chargement des ressources...';
+        }, 200);
+    </script>
+</body>
+</html>
