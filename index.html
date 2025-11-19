@@ -42,6 +42,25 @@
             opacity: 1;
         }
 
+        /* Lignes verticales ultra-serrées */
+        .background-slider::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.4) 0px,
+                rgba(0, 0, 0, 0.4) 1px,
+                rgba(255, 255, 255, 0.1) 1px,
+                rgba(255, 255, 255, 0.1) 2px
+            );
+            z-index: 2;
+            pointer-events: none;
+        }
+
         /* Overlay sombre */
         .overlay {
             position: fixed;
@@ -76,7 +95,6 @@
         .server-logo img {
             max-width: 600px;
             max-height: 300px;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
         }
 
         /* Texte de chargement */
@@ -92,17 +110,17 @@
 
         /* Barre de progression */
         .progress-container {
-            width: 500px;
+            width: 1080px;
             max-width: 90%;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 25px;
-            padding: 5px;
+            padding: 1px;
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .progress-bar {
-            height: 30px;
+            height: 5px;
             background: white;
             border-radius: 20px;
             width: 0%;
