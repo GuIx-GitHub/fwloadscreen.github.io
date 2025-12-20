@@ -167,12 +167,51 @@
 
         .volume-control.blocked {
             animation: pulse-red 2s infinite;
-            border-color: rgba(255, 0, 0, 0.5);
+            border-color: rgba(255, 187, 0, 0.5);
+        }
+
+        /* Boite 'Son en cours' */
+        .now-playing-box {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+            color: white;
+            transform: translateX(-120%);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .now-playing-box.visible {
+            transform: translateX(0);
+        }
+
+        .now-playing-title {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .now-playing-status {
+            font-size: 11px;
+            opacity: 0.6;
+            font-style: italic;
         }
 
         @keyframes pulse-red {
             0% {
-                box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4);
+                box-shadow: 0 0 0 0 rgba(255, 187, 0, 0.5);
             }
 
             70% {
@@ -210,7 +249,15 @@
     <!-- Audio -->
     <audio id="bgMusic" autoplay preload="auto" loop>
         <source src="https://guix-github.github.io/fwloadscreen.github.io/a15.mp3" type="audio/mpeg">
+        <source src="https://guix-github.github.io/fwloadscreen.github.io/a20.mp3" type="audio/mpeg">
+        <source src="https://guix-github.github.io/fwloadscreen.github.io/a10.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Boite 'Son en cours' -->
+    <div class="now-playing-box" id="nowPlayingBox">
+        <div class="now-playing-title" id="nowPlayingTitle">Musique</div>
+        <div class="now-playing-status">En cours de lecture...</div>
+    </div>
 
     <!-- Contrôle du volume -->
     <div class="volume-control" id="volumeToggle" title="Couper/Activer le son">
@@ -350,6 +397,25 @@
             toggleMute();
         });
 
+        const nowPlayingBox = document.getElementById('nowPlayingBox');
+        const nowPlayingTitle = document.getElementById('nowPlayingTitle');
+
+        function pickRandomMusic() {
+            const sources = bgMusic.querySelectorAll('source');
+            if (sources.length > 0) {
+                const randomIndex = Math.floor(Math.random() * sources.length);
+                const selectedSource = sources[randomIndex].src;
+                bgMusic.src = selectedSource;
+                bgMusic.load();
+
+                // Extraire le nom du fichier pour l'affichage
+                const fileName = selectedSource.split('/').pop().split('.')[0].toUpperCase();
+                nowPlayingTitle.textContent = fileName;
+
+                console.log("Son choisi aléatoirement:", selectedSource);
+            }
+        }
+
         // Démarrer la musique dès que possible
         function startMusic() {
             if (musicStarted) return;
@@ -362,6 +428,7 @@
                 playPromise.then(() => {
                     musicStarted = true;
                     volumeToggle.classList.remove('blocked');
+                    nowPlayingBox.classList.add('visible');
                     console.log("Musique démarrée avec succès.");
                 }).catch(error => {
                     console.log("Autoplay bloqué par le navigateur, en attente d'interaction.");
@@ -371,6 +438,7 @@
         }
 
         // Exécution immédiate
+        pickRandomMusic();
         startMusic();
 
         // Sécurité supplémentaire au chargement complet
